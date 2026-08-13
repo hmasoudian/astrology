@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astrology Learning System V4</title>
+<style>
+:root{
+  --bg:#f5f3f8;--card:#fff;--ink:#29243d;--muted:#756f82;
+  --main:#5d4e91;--soft:#eeeaf7;--border:#e4e0eb;--ok:#47795f
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.8}
+header{background:#29243d;color:#fff;padding:20px 18px}
+header h1{margin:0;font-size:22px}
+header p{margin:4px 0 0;color:#ddd;font-size:13px}
+main{max-width:900px;margin:auto;padding:18px}
+.card{background:var(--card);border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 2px 14px #0000000c}
+h2{font-size:18px;margin:0 0 14px}
+h3{font-size:16px;margin:14px 0 8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+select,textarea{
+  width:100%;padding:11px;border:1px solid #d8d3e0;border-radius:10px;
+  background:#fff;color:var(--ink);font:inherit
+}
+textarea{min-height:150px;resize:vertical}
+button{
+  border:0;border-radius:10px;padding:10px 14px;background:var(--main);
+  color:#fff;font:inherit;cursor:pointer
+}
+button.secondary{background:var(--soft);color:var(--ink)}
+button.ok{background:var(--ok)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.panel{background:#faf9fc;border:1px solid var(--border);border-radius:11px;padding:13px;margin-top:12px}
+.combo{
+  text-align:center;background:var(--soft);padding:11px;border-radius:10px;
+  font-weight:bold;margin-top:12px
+}
+.sign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sign-box{border:1px solid var(--border);border-radius:10px;padding:12px;background:#fff}
+.sign-box .title{font-weight:bold;margin-bottom:7px}
+.field{margin:4px 0}
+.field b{font-size:12px;color:var(--muted)}
+.field span{display:block}
+.logic{font-size:14px}
+.logic span{display:inline-block;background:var(--soft);padding:3px 9px;border-radius:99px;margin:2px}
+.message{font-size:13px;color:var(--muted);margin-top:8px}
+.floating{
+  position:fixed;left:18px;bottom:18px;width:44px;height:44px;border-radius:50%;
+  padding:0;background:var(--main);box-shadow:0 4px 14px #0003;z-index:20
+}
+.hidden{display:none!important}
+.saved{color:var(--ok);font-size:13px}
+@media(max-width:700px){
+  .grid3,.sign-grid{grid-template-columns:1fr}
+  main{padding:12px}
+  header h1{font-size:19px}
+}
+</style>
+</head>
+<body id="top">
+
+<header>
+  <h1 style="margin-bottom: 6px;">Astrology Learning System</h1>
+  <div style="font-size: 1.15rem; font-weight: bold; margin-bottom: 4px;">بر اساس آموزش‌های استاد صالحی</div>
+  <div style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 8px;">گردآوری و توسعه: حسین مسعودیان</div>
+  <p style="margin-top: 4px; font-size: 0.9rem; opacity: 0.8;">انتخاب ← نشانه‌ها ← تحلیل شخصی ← منطق سیستم</p>
+</header>
+
+<main>
+
+<section class="card" id="selection">
+  <h2>۱. انتخاب</h2>
+  <div class="grid3">
+    <div>
+      <label>سیاره</label>
+      <select id="planet"></select>
+    </div>
+    <div>
+      <label>برج</label>
+      <select id="sign"></select>
+    </div>
+    <div>
+      <label>خانه</label>
+      <select id="house"></select>
+    </div>
+  </div>
+  <div class="actions">
+    <button onclick="showSigns()">نمایش نشانه‌ها</button>
+    <button class="secondary" onclick="newPractice()">تمرین جدید</button>
+  </div>
+  <div id="combo" class="combo hidden"></div>
+  <div id="loadMsg" class="message"></div>
+</section>
+
+<section class="card" id="signsSection">
+  <h2>۲. نشانه‌های اولیه</h2>
+  <div id="signs" class="message">ابتدا ترکیب را انتخاب کنید.</div>
+</section>
+
+<section class="card" id="analysisSection">
+  <h2>۳. تحلیل شخصی</h2>
+  <p class="message">نشانه‌ها را ببین و برداشت خودت را از ترکیب بنویس.</p>
+  <textarea id="analysis" placeholder="تحلیل خودم..."></textarea>
+  <div class="actions">
+    <button class="ok" onclick="savePractice()">💾 ذخیره تحلیل</button>
+    <button class="secondary" onclick="clearPage()">🧹 پاک کردن صفحه</button>
+  </div>
+  <div id="saveMsg"></div>
+</section>
+
+<section class="card" id="systemSection">
+  <h2>۴. منطق سیستم</h2>
+  <div class="logic">
+    <span>سیاره ← چه چیزی؟</span>
+    <span>برج ← چگونه؟</span>
+    <span>خانه ← کجا؟</span>
+  </div>
+  <div id="logicText" class="message"></div>
+</section>
+
+</main>
+
+<button class="floating" onclick="goTop()" title="بازگشت به بالا">↑</button>
+
+<script>
+const DB_URL = "astrology_tables.json";
+const DB_KEY = "astro_v4_db";
+const PRACTICE_KEY = "astro_v4_practice";
+let DB = null;
+
+const $ = id => document.getElementById(id);
+
+function normalize(x){
+  return String(x??"").trim().toLowerCase()
+    .replace(/ي/g,"ی").replace(/ك/g,"ک")
+    .replace(/ۀ/g,"ه").replace(/\u200c/g,"");
+}
+function escapeHTML(x){
+  return String(x??"").replace(/[&<>"']/g,m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+function label(obj){
+  if(!obj || typeof obj!=="object") return "—";
+  const keys=Object.keys(obj);
+  const preferred=["نام","عنوان","name","سیاره","برج","خانه","کلیدواژه"];
+  const key=keys.find(k=>preferred.some(p=>normalize(k).includes(normalize(p))))||keys[0];
+  return String(obj[key]??"—");
+}
+function shortFields(obj, limit=5){
+  if(!obj || typeof obj!=="object") return "";
+  const entries=Object.entries(obj).filter(([k,v])=>String(v??"").trim()!=="");
+  const priority=[
+    "کلیدواژه اصلی","کلیدواژه","نیاز روانی","کارکرد","انرژی / عملکرد",
+    "ویژگی مثبت","سایه","ویژگی_اصلی","سبک_عملکرد","نقطه_قوت",
+    "موضوعات اصلی","ویژگی / هدف","راهبرد"
+  ];
+  const picked=[];
+  for(const p of priority){
+    const found=entries.find(([k])=>normalize(k)===normalize(p));
+    if(found && !picked.some(([k])=>k===found[0])) picked.push(found);
+  }
+  for(const e of entries){
+    if(picked.length>=limit) break;
+    if(!picked.some(([k])=>k===e[0])) picked.push(e);
+  }
+  return picked.slice(0,limit).map(([k,v])=>
+    `<div class="field"><b>${escapeHTML(k)}</b><span>${escapeHTML(v)}</span></div>`
+  ).join("");
+}
+function setSelect(id,arr){
+  const el=$(id);el.innerHTML="";
+  (arr||[]).forEach((obj,i)=>{
+    const op=document.createElement("option");
+    op.value=i;op.textContent=label(obj)||String(i+1);el.appendChild(op);
+  });
+}
+function selected(){
+  if(!DB)return null;
+  return {
+    planet:DB.planets[+$("planet").value],
+    sign:DB.signs[+$("sign").value],
+    house:DB.houses[+$("house").value]
+  };
+}
+function normalizeDB(raw){
+  const t=raw.tables||raw;
+  const planets=t.planets_table||t.planets;
+  const signs=t.zodiac_table||t.signs||t.zodiac;
+  const houses=t.houses_table||t.houses;
+  if(!Array.isArray(planets)||!Array.isArray(signs)||!Array.isArray(houses))
+    throw new Error("ساختار دیتابیس صحیح نیست.");
+  return {planets,signs,houses};
+}
+async function loadDB(){
+  try{
+    const response=await fetch(DB_URL,{cache:"no-store"});
+    if(!response.ok) throw new Error("فایل دیتابیس پیدا نشد.");
+    const raw=await response.json();
+    DB=normalizeDB(raw);
+    localStorage.setItem(DB_KEY,JSON.stringify(DB));
+    setSelect("planet",DB.planets);
+    setSelect("sign",DB.signs);
+    setSelect("house",DB.houses);
+    $("loadMsg").textContent="دیتابیس آماده است.";
+  }catch(err){
+    try{
+      const saved=JSON.parse(localStorage.getItem(DB_KEY));
+      if(saved?.planets&&saved?.signs&&saved?.houses){
+        DB=saved;
+        setSelect("planet",DB.planets);
+        setSelect("sign",DB.signs);
+        setSelect("house",DB.houses);
+        $("loadMsg").textContent="دیتابیس ذخیره‌شده روی این دستگاه استفاده شد.";
+        return;
+      }
+    }catch(e){}
+    $("loadMsg").textContent="خطا در بارگذاری دیتابیس: "+err.message;
+  }
+}
+function showSigns(){
+  const x=selected();
+  if(!x)return;
+  $("combo").classList.remove("hidden");
+  $("combo").innerHTML=
+    `${escapeHTML(label(x.planet))} + ${escapeHTML(label(x.sign))} + ${escapeHTML(label(x.house))}`;
+
+  $("signs").innerHTML=`
+    <div class="sign-grid">
+      <div class="sign-box"><div class="title">سیاره: ${escapeHTML(label(x.planet))}</div>${shortFields(x.planet)}</div>
+      <div class="sign-box"><div class="title">برج: ${escapeHTML(label(x.sign))}</div>${shortFields(x.sign)}</div>
+      <div class="sign-box"><div class="title">خانه: ${escapeHTML(label(x.house))}</div>${shortFields(x.house)}</div>
+    </div>`;
+
+  $("logicText").innerHTML=
+    `در این ترکیب، اول <b>${escapeHTML(label(x.planet))}</b> را به‌عنوان «چه چیزی»، 
+    <b>${escapeHTML(label(x.sign))}</b> را به‌عنوان «چگونه» و 
+    <b>${escapeHTML(label(x.house))}</b> را به‌عنوان «کجا» در نظر بگیر.`;
+
+  go("signsSection");
+}
+function savePractice(){
+  const x=selected();
+  const text=$("analysis").value.trim();
+  if(!x)return alert("ابتدا سیاره، برج و خانه را انتخاب کنید.");
+  if(!text)return alert("اول تحلیل شخصی خودت را بنویس.");
+  const list=JSON.parse(localStorage.getItem(PRACTICE_KEY)||"[]");
+  list.push({
+    date:new Date().toISOString(),
+    planet:label(x.planet),sign:label(x.sign),house:label(x.house),
+    analysis:text
+  });
+  localStorage.setItem(PRACTICE_KEY,JSON.stringify(list));
+  $("saveMsg").innerHTML=`<div class="saved">✓ تحلیل ذخیره شد. تعداد تمرین‌های ذخیره‌شده: ${list.length}</div>`;
+}
+function clearPage(){
+  if($("analysis").value.trim() &&
+     !confirm("تحلیل فعلی پاک شود؟ تمرین‌های قبلی و دیتابیس حذف نمی‌شوند.")) return;
+  $("analysis").value="";
+  $("combo").classList.add("hidden");
+  $("signs").innerHTML="ابتدا ترکیب را انتخاب کنید.";
+  $("logicText").textContent="";
+  $("saveMsg").textContent="";
+  $("planet").selectedIndex=0;
+  $("sign").selectedIndex=0;
+  $("house").selectedIndex=0;
+  goTop();
+}
+function newPractice(){
+  $("analysis").value="";
+  $("combo").classList.add("hidden");
+  $("signs").innerHTML="ترکیب جدید را انتخاب کنید.";
+  $("logicText").textContent="";
+  $("saveMsg").textContent="";
+  $("analysisSection").scrollIntoView({behavior:"smooth"});
+  $("analysis").focus();
+}
+function goTop(){window.scrollTo({top:0,behavior:"smooth"})}
+
+loadDB();
+</script>
+</body>
+</html>
