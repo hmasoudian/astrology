@@ -1,286 +1,387 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Astrology Learning System V4</title>
-<style>
-:root{
-  --bg:#f5f3f8;--card:#fff;--ink:#29243d;--muted:#756f82;
-  --main:#5d4e91;--soft:#eeeaf7;--border:#e4e0eb;--ok:#47795f
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.8}
-header{background:#29243d;color:#fff;padding:20px 18px}
-header h1{margin:0;font-size:22px}
-header p{margin:4px 0 0;color:#ddd;font-size:13px}
-main{max-width:900px;margin:auto;padding:18px}
-.card{background:var(--card);border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 2px 14px #0000000c}
-h2{font-size:18px;margin:0 0 14px}
-h3{font-size:16px;margin:14px 0 8px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
-select,textarea{
-  width:100%;padding:11px;border:1px solid #d8d3e0;border-radius:10px;
-  background:#fff;color:var(--ink);font:inherit
-}
-textarea{min-height:150px;resize:vertical}
-button{
-  border:0;border-radius:10px;padding:10px 14px;background:var(--main);
-  color:#fff;font:inherit;cursor:pointer
-}
-button.secondary{background:var(--soft);color:var(--ink)}
-button.ok{background:var(--ok)}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.panel{background:#faf9fc;border:1px solid var(--border);border-radius:11px;padding:13px;margin-top:12px}
-.combo{
-  text-align:center;background:var(--soft);padding:11px;border-radius:10px;
-  font-weight:bold;margin-top:12px
-}
-.sign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.sign-box{border:1px solid var(--border);border-radius:10px;padding:12px;background:#fff}
-.sign-box .title{font-weight:bold;margin-bottom:7px}
-.field{margin:4px 0}
-.field b{font-size:12px;color:var(--muted)}
-.field span{display:block}
-.logic{font-size:14px}
-.logic span{display:inline-block;background:var(--soft);padding:3px 9px;border-radius:99px;margin:2px}
-.message{font-size:13px;color:var(--muted);margin-top:8px}
-.floating{
-  position:fixed;left:18px;bottom:18px;width:44px;height:44px;border-radius:50%;
-  padding:0;background:var(--main);box-shadow:0 4px 14px #0003;z-index:20
-}
-.hidden{display:none!important}
-.saved{color:var(--ok);font-size:13px}
-@media(max-width:700px){
-  .grid3,.sign-grid{grid-template-columns:1fr}
-  main{padding:12px}
-  header h1{font-size:19px}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه تحلیل جامع چارت نجومی - بر اساس آموزه‌های استاد صالحی</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e67e22;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Tahoma', 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        select, button, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button.btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.btn-primary:hover {
+            background-color: #d35400;
+        }
+
+        button.btn-success {
+            background-color: #27ae60;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .output-box {
+            background: #fafafa;
+            border-right: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .house-status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .house-btn {
+            padding: 8px;
+            text-align: center;
+            background: #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .house-btn.active {
+            background: #27ae60;
+            color: white;
+        }
+    </style>
 </head>
-<body id="top">
+<body>
 
-<header>
-  <h1 style="margin-bottom: 6px;">Astrology Learning System</h1>
-  <div style="font-size: 1.15rem; font-weight: bold; margin-bottom: 4px;">بر اساس آموزش‌های استاد صالحی</div>
-  <div style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 8px;">گردآوری و توسعه: حسین مسعودیان</div>
-  <p style="margin-top: 4px; font-size: 0.9rem; opacity: 0.8;">انتخاب ← نشانه‌ها ← تحلیل شخصی ← منطق سیستم</p>
-</header>
-
-<main>
-
-<section class="card" id="selection">
-  <h2>۱. انتخاب</h2>
-  <div class="grid3">
-    <div>
-      <label>سیاره</label>
-      <select id="planet"></select>
+<div class="container">
+    <div class="header">
+        <h2>📘 سامانه تحلیل و ترکیب سه‌گانه/چهارگانه چارت</h2>
+        <p>بر اساس متد آموزش استاد صالحی + پایگاه جامع JSON</p>
     </div>
-    <div>
-      <label>برج</label>
-      <select id="sign"></select>
+
+    <div class="grid-layout">
+        <!-- بخش انتخاب و تولید -->
+        <div class="card">
+            <h3>۱. انتخاب عناصر چارت</h3>
+            
+            <div class="form-group">
+                <label>انتخاب خانه (از ۱ تا ۱۲):</label>
+                <select id="select-house" onchange="updateHouseUI()"></select>
+            </div>
+
+            <div class="form-group">
+                <label>سیاره:</label>
+                <select id="select-planet"></select>
+            </div>
+
+            <div class="form-group">
+                <label>برج (نشان):</label>
+                <select id="select-sign"></select>
+            </div>
+
+            <div class="form-group">
+                <label>جنبه / زاویه (اختیاری):</label>
+                <select id="select-aspect">
+                    <option value="">-- بدون جنبه (تفسیر سه‌گانه ساده) --</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" onclick="generateAnalysis()">تولید ترکیب پیش‌فرض</button>
+
+            <div class="output-box" id="analysis-preview" style="display:none;">
+                <h4>پیش‌نمایش تعبیر سه‌گانه:</h4>
+                <div id="step-by-step"></div>
+                <hr>
+                <label>متن ترکیبی و ویرایش نهایی شما:</label>
+                <textarea id="final-user-text" rows="6"></textarea>
+                <button class="btn-success" onclick="saveHouseData()">ثبت و ذخیره در خانه انتخابی</button>
+            </div>
+        </div>
+
+        <!-- وضعیت چارت ۱۲ خانه -->
+        <div class="card">
+            <h3>۲. وضعیت چارت فرد (۱۲ خانه)</h3>
+            <p style="font-size: 12px; color: #666;">با کلیک روی هر خانه وضعیت ذخیره‌شده آن را مشاهده یا ویرایش کنید:</p>
+            
+            <div class="house-status-grid" id="house-grid"></div>
+
+            <div style="margin-top: 30px;">
+                <button class="btn-primary" style="background-color: #2980b9;" onclick="exportFullChartHTML()">
+                    📥 خروجی نهایی کل چارت (فایل HTML)
+                </button>
+                <button onclick="clearAllData()" style="margin-top: 10px; background: #e74c3c; color: white; border:none; padding:5px; cursor:pointer;">
+                    بازنشانی کل اطلاعات
+                </button>
+            </div>
+        </div>
     </div>
-    <div>
-      <label>خانه</label>
-      <select id="house"></select>
-    </div>
-  </div>
-  <div class="actions">
-    <button onclick="showSigns()">نمایش نشانه‌ها</button>
-    <button class="secondary" onclick="newPractice()">تمرین جدید</button>
-  </div>
-  <div id="combo" class="combo hidden"></div>
-  <div id="loadMsg" class="message"></div>
-</section>
-
-<section class="card" id="signsSection">
-  <h2>۲. نشانه‌های اولیه</h2>
-  <div id="signs" class="message">ابتدا ترکیب را انتخاب کنید.</div>
-</section>
-
-<section class="card" id="analysisSection">
-  <h2>۳. تحلیل شخصی</h2>
-  <p class="message">نشانه‌ها را ببین و برداشت خودت را از ترکیب بنویس.</p>
-  <textarea id="analysis" placeholder="تحلیل خودم..."></textarea>
-  <div class="actions">
-    <button class="ok" onclick="savePractice()">💾 ذخیره تحلیل</button>
-    <button class="secondary" onclick="clearPage()">🧹 پاک کردن صفحه</button>
-  </div>
-  <div id="saveMsg"></div>
-</section>
-
-<section class="card" id="systemSection">
-  <h2>۴. منطق سیستم</h2>
-  <div class="logic">
-    <span>سیاره ← چه چیزی؟</span>
-    <span>برج ← چگونه؟</span>
-    <span>خانه ← کجا؟</span>
-  </div>
-  <div id="logicText" class="message"></div>
-</section>
-
-</main>
-
-<button class="floating" onclick="goTop()" title="بازگشت به بالا">↑</button>
+</div>
 
 <script>
-const DB_URL = "astrology_tables.json";
-const DB_KEY = "astro_v4_db";
-const PRACTICE_KEY = "astro_v4_practice";
-let DB = null;
+// ۱. بارگذاری داده‌های کامل JSON
+let db = {};
+let userChart = {}; // ذخیره وضعیت ۱۲ خانه
 
-const $ = id => document.getElementById(id);
+// مقداردهی اولیه
+async function init() {
+    try {
+        const res = await fetch('astrology-database.json');
+        db = await res.json();
+        
+        populateDropdowns();
+        renderHouseGrid();
+        loadFromLocalStorage();
+    } catch (e) {
+        console.error("خطا در دریافت فایل JSON:", e);
+    }
+}
 
-function normalize(x){
-  return String(x??"").trim().toLowerCase()
-    .replace(/ي/g,"ی").replace(/ك/g,"ک")
-    .replace(/ۀ/g,"ه").replace(/\u200c/g,"");
-}
-function escapeHTML(x){
-  return String(x??"").replace(/[&<>"']/g,m=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
-function label(obj){
-  if(!obj || typeof obj!=="object") return "—";
-  const keys=Object.keys(obj);
-  const preferred=["نام","عنوان","name","سیاره","برج","خانه","کلیدواژه"];
-  const key=keys.find(k=>preferred.some(p=>normalize(k).includes(normalize(p))))||keys[0];
-  return String(obj[key]??"—");
-}
-function shortFields(obj, limit=5){
-  if(!obj || typeof obj!=="object") return "";
-  const entries=Object.entries(obj).filter(([k,v])=>String(v??"").trim()!=="");
-  const priority=[
-    "کلیدواژه اصلی","کلیدواژه","نیاز روانی","کارکرد","انرژی / عملکرد",
-    "ویژگی مثبت","سایه","ویژگی_اصلی","سبک_عملکرد","نقطه_قوت",
-    "موضوعات اصلی","ویژگی / هدف","راهبرد"
-  ];
-  const picked=[];
-  for(const p of priority){
-    const found=entries.find(([k])=>normalize(k)===normalize(p));
-    if(found && !picked.some(([k])=>k===found[0])) picked.push(found);
-  }
-  for(const e of entries){
-    if(picked.length>=limit) break;
-    if(!picked.some(([k])=>k===e[0])) picked.push(e);
-  }
-  return picked.slice(0,limit).map(([k,v])=>
-    `<div class="field"><b>${escapeHTML(k)}</b><span>${escapeHTML(v)}</span></div>`
-  ).join("");
-}
-function setSelect(id,arr){
-  const el=$(id);el.innerHTML="";
-  (arr||[]).forEach((obj,i)=>{
-    const op=document.createElement("option");
-    op.value=i;op.textContent=label(obj)||String(i+1);el.appendChild(op);
-  });
-}
-function selected(){
-  if(!DB)return null;
-  return {
-    planet:DB.planets[+$("planet").value],
-    sign:DB.signs[+$("sign").value],
-    house:DB.houses[+$("house").value]
-  };
-}
-function normalizeDB(raw){
-  const t=raw.tables||raw;
-  const planets=t.planets_table||t.planets;
-  const signs=t.zodiac_table||t.signs||t.zodiac;
-  const houses=t.houses_table||t.houses;
-  if(!Array.isArray(planets)||!Array.isArray(signs)||!Array.isArray(houses))
-    throw new Error("ساختار دیتابیس صحیح نیست.");
-  return {planets,signs,houses};
-}
-async function loadDB(){
-  try{
-    const response=await fetch(DB_URL,{cache:"no-store"});
-    if(!response.ok) throw new Error("فایل دیتابیس پیدا نشد.");
-    const raw=await response.json();
-    DB=normalizeDB(raw);
-    localStorage.setItem(DB_KEY,JSON.stringify(DB));
-    setSelect("planet",DB.planets);
-    setSelect("sign",DB.signs);
-    setSelect("house",DB.houses);
-    $("loadMsg").textContent="دیتابیس آماده است.";
-  }catch(err){
-    try{
-      const saved=JSON.parse(localStorage.getItem(DB_KEY));
-      if(saved?.planets&&saved?.signs&&saved?.houses){
-        DB=saved;
-        setSelect("planet",DB.planets);
-        setSelect("sign",DB.signs);
-        setSelect("house",DB.houses);
-        $("loadMsg").textContent="دیتابیس ذخیره‌شده روی این دستگاه استفاده شد.";
-        return;
-      }
-    }catch(e){}
-    $("loadMsg").textContent="خطا در بارگذاری دیتابیس: "+err.message;
-  }
-}
-function showSigns(){
-  const x=selected();
-  if(!x)return;
-  $("combo").classList.remove("hidden");
-  $("combo").innerHTML=
-    `${escapeHTML(label(x.planet))} + ${escapeHTML(label(x.sign))} + ${escapeHTML(label(x.house))}`;
+function populateDropdowns() {
+    // خانه‌ها
+    const houseSel = document.getElementById('select-house');
+    db.houses.forEach(h => {
+        houseSel.innerHTML += `<option value="${h.number}">خانه ${h.number}: ${h.key_code}</option>`;
+    });
 
-  $("signs").innerHTML=`
-    <div class="sign-grid">
-      <div class="sign-box"><div class="title">سیاره: ${escapeHTML(label(x.planet))}</div>${shortFields(x.planet)}</div>
-      <div class="sign-box"><div class="title">برج: ${escapeHTML(label(x.sign))}</div>${shortFields(x.sign)}</div>
-      <div class="sign-box"><div class="title">خانه: ${escapeHTML(label(x.house))}</div>${shortFields(x.house)}</div>
-    </div>`;
+    // سیارات
+    const planetSel = document.getElementById('select-planet');
+    db.planets.forEach(p => {
+        planetSel.innerHTML += `<option value="${p.name_fa}">${p.symbol} ${p.name_fa} (${p.core_function.split('،')[0]})</option>`;
+    });
 
-  $("logicText").innerHTML=
-    `در این ترکیب، اول <b>${escapeHTML(label(x.planet))}</b> را به‌عنوان «چه چیزی»، 
-    <b>${escapeHTML(label(x.sign))}</b> را به‌عنوان «چگونه» و 
-    <b>${escapeHTML(label(x.house))}</b> را به‌عنوان «کجا» در نظر بگیر.`;
+    // بروج
+    const signSel = document.getElementById('select-sign');
+    db.zodiac_signs.forEach(s => {
+        signSel.innerHTML += `<option value="${s.name_fa}">${s.emoji} ${s.name_fa} (${s.element})</option>`;
+    });
 
-  go("signsSection");
+    // جنبه‌ها
+    const aspectSel = document.getElementById('select-aspect');
+    db.aspects.forEach(a => {
+        aspectSel.innerHTML += `<option value="${a.name_fa}">${a.symbol} ${a.name_fa} (${a.angle}) - ${a.keywords}</option>`;
+    });
 }
-function savePractice(){
-  const x=selected();
-  const text=$("analysis").value.trim();
-  if(!x)return alert("ابتدا سیاره، برج و خانه را انتخاب کنید.");
-  if(!text)return alert("اول تحلیل شخصی خودت را بنویس.");
-  const list=JSON.parse(localStorage.getItem(PRACTICE_KEY)||"[]");
-  list.push({
-    date:new Date().toISOString(),
-    planet:label(x.planet),sign:label(x.sign),house:label(x.house),
-    analysis:text
-  });
-  localStorage.setItem(PRACTICE_KEY,JSON.stringify(list));
-  $("saveMsg").innerHTML=`<div class="saved">✓ تحلیل ذخیره شد. تعداد تمرین‌های ذخیره‌شده: ${list.length}</div>`;
-}
-function clearPage(){
-  if($("analysis").value.trim() &&
-     !confirm("تحلیل فعلی پاک شود؟ تمرین‌های قبلی و دیتابیس حذف نمی‌شوند.")) return;
-  $("analysis").value="";
-  $("combo").classList.add("hidden");
-  $("signs").innerHTML="ابتدا ترکیب را انتخاب کنید.";
-  $("logicText").textContent="";
-  $("saveMsg").textContent="";
-  $("planet").selectedIndex=0;
-  $("sign").selectedIndex=0;
-  $("house").selectedIndex=0;
-  goTop();
-}
-function newPractice(){
-  $("analysis").value="";
-  $("combo").classList.add("hidden");
-  $("signs").innerHTML="ترکیب جدید را انتخاب کنید.";
-  $("logicText").textContent="";
-  $("saveMsg").textContent="";
-  $("analysisSection").scrollIntoView({behavior:"smooth"});
-  $("analysis").focus();
-}
-function goTop(){window.scrollTo({top:0,behavior:"smooth"})}
 
-loadDB();
+// ۲. الگوریتم تولید تفسیر سه‌گانه براساس فرمول استاد صالحی
+function generateAnalysis() {
+    const planet = db.planets.find(p => p.name_fa === document.getElementById('select-planet').value);
+    const sign = db.zodiac_signs.find(s => s.name_fa === document.getElementById('select-sign').value);
+    const house = db.houses.find(h => h.number == document.getElementById('select-house').value);
+    const aspectName = document.getElementById('select-aspect').value;
+    const aspect = db.aspects.find(a => a.name_fa === aspectName);
+
+    let htmlStep = `
+        <p><strong>۱. سیاره (${planet.name_fa}):</strong> نیاز به <em>${planet.basic_needs[0]}</em> (${planet.core_function})[span_0](start_span)[span_0](end_span)</p>
+        <p><strong>۲. برج (${sign.name_fa}):</strong> با سبک <em>${sign.keywords.join('، ')}</em> (${sign.strategy})[span_1](start_span)[span_1](end_span)</p>
+        <p><strong>۳. خانه (خانه ${house.number}):</strong> در عرصه <em>${house.key_code}</em> (${house.domain})[span_2](start_span)[span_2](end_span)</p>
+    `;
+
+    if (aspect) {
+        htmlStep += `<p><strong>۴. جنبه/زاویه (${aspect.name_fa}):</strong> با کیفیت <em>${aspect.concept}</em>[span_3](start_span)[span_3](end_span)</p>`;
+    }
+
+    document.getElementById('step-by-step').innerHTML = htmlStep;
+
+    // متن پیشنهادی بر اساس قاعده طلایی
+    let textTemplate = `«من نیاز به ${planet.basic_needs[0]} و ${planet.core_function.split('،')[0]} را، به سبکِ ${sign.keywords.join(' و ')} (${sign.strategy})، در عرصه‌ی ${house.title} انجام می‌دهم.»\n\n`;
+    textTemplate += `تعبیر روان:\nشما در حوزه ${house.key_code}، نیاز دارید تا مثل یک ${sign.symbol_animal || sign.name_fa} عمل کنید. ${planet.core_question}\n\n`;
+    textTemplate += `🚨 چالش و سایه روانی:\n${planet.shadow}\nسایه برج: ${sign.shadow}`;
+
+    if (aspect) {
+        textTemplate += `\n\n⚛️ تاثیر جنبه (${aspect.name_fa}):\nاین وضعیت تحت تاثیر زاویه ${aspect.name_fa} قرار دارد (${aspect.keywords}). ${aspect.concept}`;
+    }
+
+    document.getElementById('final-user-text').value = textTemplate;
+    document.getElementById('analysis-preview').style.display = 'block';
+}
+
+// ۳. مدیریت ۱۲ خانه و ذخیره‌سازی
+function renderHouseGrid() {
+    const grid = document.getElementById('house-grid');
+    grid.innerHTML = '';
+    for(let i = 1; i <= 12; i++) {
+        const isFilled = userChart[i] ? 'active' : '';
+        grid.innerHTML += `<div class="house-btn ${isFilled}" onclick="selectHouseFromGrid(${i})">خانه ${i}<br>${userChart[i] ? '✅ پر شده' : '⚪ خالی'}</div>`;
+    }
+}
+
+function saveHouseData() {
+    const hNum = document.getElementById('select-house').value;
+    const planet = document.getElementById('select-planet').value;
+    const sign = document.getElementById('select-sign').value;
+    const aspect = document.getElementById('select-aspect').value;
+    const text = document.getElementById('final-user-text').value;
+
+    userChart[hNum] = {
+        planet,
+        sign,
+        aspect,
+        text,
+        timestamp: new Date().toLocaleString('fa-IR')
+    };
+
+    localStorage.setItem('userAstrologyChart', JSON.stringify(userChart));
+    renderHouseGrid();
+    alert(`اطلاعات خانه ${hNum} با موفقیت ثبت شد.`);
+}
+
+function selectHouseFromGrid(hNum) {
+    document.getElementById('select-house').value = hNum;
+    if(userChart[hNum]) {
+        document.getElementById('final-user-text').value = userChart[hNum].text;
+        document.getElementById('analysis-preview').style.display = 'block';
+    } else {
+        document.getElementById('analysis-preview').style.display = 'none';
+    }
+}
+
+function loadFromLocalStorage() {
+    const saved = localStorage.getItem('userAstrologyChart');
+    if(saved) {
+        userChart = JSON.parse(saved);
+        renderHouseGrid();
+    }
+}
+
+function clearAllData() {
+    if(confirm('آیا از پاک کردن تمامی اطلاعات چارت اطمینان دارید؟')) {
+        userChart = {};
+        localStorage.removeItem('userAstrologyChart');
+        renderHouseGrid();
+        document.getElementById('analysis-preview').style.display = 'none';
+    }
+}
+
+// ۴. تولید خروجی فایل HTML مستقل برای کاربر
+function exportFullChartHTML() {
+    let htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fa" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>گزارش تحلیل کامل چارت نجومی شخصی</title>
+        <style>
+            body { font-family: 'Tahoma', sans-serif; background: #f9f9f9; padding: 30px; line-height: 1.8; direction: rtl; }
+            .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+            h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #e67e22; padding-bottom: 10px; }
+            .house-card { background: #fcfcfc; border-right: 5px solid #2980b9; margin-bottom: 25px; padding: 20px; border-radius: 4px; border: 1px solid #eee; }
+            .house-title { font-size: 18px; color: #d35400; font-weight: bold; margin-bottom: 10px; }
+            .meta { font-size: 13px; color: #7f8c8d; margin-bottom: 15px; background: #eef2f5; padding: 5px 10px; border-radius: 3px; display: inline-block; }
+            .content { white-space: pre-line; color: #333; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>📘 شناسنامه و تفسیر جامع ۱۲ خانه چارت</h1>
+            <p style="text-align:center;">تنظیم شده بر اساس متد سه‌گانه (سیاره، برج، خانه)</p>
+            <hr><br>
+    `;
+
+    for(let i = 1; i <= 12; i++) {
+        if(userChart[i]) {
+            const h = userChart[i];
+            htmlContent += `
+                <div class="house-card">
+                    <div class="house-title">🏛️ خانه ${i} چارت شخصی</div>
+                    <div class="meta">ترکيب: <strong>${h.planet}</strong> در برج <strong>${h.sign}</strong> ${h.aspect ? `(زاویه: ${h.aspect})` : ''}</div>
+                    <div class="content">${h.text}</div>
+                </div>
+            `;
+        } else {
+            htmlContent += `
+                <div class="house-card" style="border-right-color: #ccc; opacity: 0.6;">
+                    <div class="house-title">🏛️ خانه ${i}</div>
+                    <div class="content"><em>اطلاعاتی برای این خانه ثبت نشده است.</em></div>
+                </div>
+            `;
+        }
+    }
+
+    htmlContent += `</div></body></html>`;
+
+    // دانلود فایل HTML
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Astrology_Chart_Analysis_${new Date().toISOString().slice(0,10)}.html`;
+    a.click();
+}
+
+window.onload = init;
 </script>
 </body>
 </html>
