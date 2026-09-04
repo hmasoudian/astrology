@@ -1,27 +1,83 @@
-// نمونه مدل ساختار داده جدید برای سیارات
-const chartData = {
-  planets: [
-    { 
-      id: "sun", 
-      name_fa: "خورشید", 
-      symbol: "☉", 
-      sign: "اسد",    // نشان/برج
-      house: 5        // خانه
-    },
-    { 
-      id: "moon", 
-      name_fa: "ماه", 
-      symbol: "☽", 
-      sign: "عقرب", 
-      house: 8 
-    },
-    { 
-      id: "mercury", 
-      name_fa: "عطارد", 
-      symbol: "☿", 
-      sign: "اسد",    // چند سیاره می‌توانند در یک نشان یا خانه باشند
-      house: 5 
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحلیل چارت آسترولوژی</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; line-height: 1.6; margin: 20px; background-color: #fdfdfd; color: #333; }
+    h1 { text-align: center; color: #2c3e50; }
+    .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+    .card { border-bottom: 1px solid #eee; padding: 10px 0; }
+    .card:last-child { border-bottom: none; }
+    .badge { background: #3498db; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; margin-left: 5px; }
+    .badge-empty { background: #95a5a6; }
+    .badge-house { background: #8e44ad; }
+  </style>
+</head>
+<body>
+
+  <h1>تحلیل جایگاه سیارات در چارت</h1>
+
+  <!-- ۱. وضعیت سیارات (محور اصلی) -->
+  <div class="section">
+    <h2>۱. جایگاه سیارات (Planets Placement)</h2>
+    <div id="planets-list"></div>
+  </div>
+
+  <!-- ۲. نمای خانه‌ها (تجمع سیارات) -->
+  <div class="section">
+    <h2>۲. وضعیت خانه‌ها (Houses Overview)</h2>
+    <div id="houses-list"></div>
+  </div>
+
+  <script>
+    // ۱. اطلاعات اصلی سیارات و جایگاه آن‌ها در چارت فرد
+    const planetsData = [
+      { name: "خورشید", symbol: "☉", sign: "اسد", house: 5, function: "هویت، اراده و مرکز ثقل روان" },
+      { name: "ماه", symbol: "☽", sign: "حوت", house: 12, function: "احساسات، غرایز و نیازهای عاطفی" },
+      { name: "عطارد", symbol: "☿", sign: "اسد", house: 5, function: "ذهن منطقی، ارتباطات و تحلیل" },
+      { name: "زهره", symbol: "♀", sign: "میزان", house: 7, function: "عشق، ارزش‌ها و روابط" },
+      { name: "مریخ", symbol: "♂", sign: "عقرب", house: 8, function: "انرژی حیاتی، اقدام و انگیزه" },
+      { name: "مشتری", symbol: "♃", sign: "قوس", house: 9, function: "رشد، توسعه و فلسفه زندگی" },
+      { name: "زحل", symbol: "♄", sign: "جدی", house: 10, function: "ساختار، انضباط و مسئولیت" },
+      { name: "اورانوس", symbol: "♅", sign: "دلو", house: 11, function: "نوآوری، استقلال و بیداری" },
+      { name: "نپتون", symbol: "♆", sign: "حوت", house: 12, function: "الهام، معنویت و شهود" },
+      { name: "پلوتو", symbol: "♇", sign: "عقرب", house: 8, function: "تحول بنیادین و قدرت پنهان" }
+    ];
+
+    // ۲. رندر کردن لیست سیارات (روش اصلی)
+    const planetsContainer = document.getElementById('planets-list');
+    planetsData.forEach(p => {
+      planetsContainer.innerHTML += `
+        <div class="card">
+          <strong>${p.symbol} ${p.name}</strong> 
+          <span class="badge">نشان: ${p.sign}</span>
+          <span class="badge badge-house">خانه ${p.house}</span>
+          <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #555;">${p.function}</p>
+        </div>`;
+    });
+
+    // ۳. رندر کردن خانه‌ها بر اساس سیارات موجود در آن‌ها
+    const housesContainer = document.getElementById('houses-list');
+    for (let houseNum = 1; houseNum <= 12; houseNum++) {
+      // پیدا کردن سیاراتی که در این خانه قرار دارند
+      const planetsInHouse = planetsData.filter(p => p.house === houseNum);
+
+      let houseContent = "";
+      if (planetsInHouse.length > 0) {
+        const names = planetsInHouse.map(p => `${p.symbol} ${p.name}`).join('، ');
+        houseContent = `حاوی سیارات: <strong>${names}</strong> (${planetsInHouse.length} سیاره)`;
+      } else {
+        houseContent = `<span class="badge badge-empty">خانه خالی</span> (بدون سیاره اصلی)`;
+      }
+
+      housesContainer.innerHTML += `
+        <div class="card">
+          <strong>خانه ${houseNum}:</strong> ${houseContent}
+        </div>`;
     }
-    // مابقی سیارات...
-  ]
-};
+  </script>
+
+</body>
+</html>
