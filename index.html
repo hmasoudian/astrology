@@ -5,34 +5,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تحلیل چارت آسترولوژی</title>
   <style>
-    body { font-family: Tahoma, sans-serif; line-height: 1.6; margin: 20px; background-color: #fdfdfd; color: #333; }
-    h1 { text-align: center; color: #2c3e50; }
-    .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
-    .card { border-bottom: 1px solid #eee; padding: 10px 0; }
-    .card:last-child { border-bottom: none; }
-    .badge { background: #3498db; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; margin-left: 5px; }
-    .badge-empty { background: #95a5a6; }
-    .badge-house { background: #8e44ad; }
+    /* ۱. ریست و تنظیمات پایه برای جلوگیری از بهم‌ریختگی layout */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f6f9;
+      color: #333;
+      padding: 20px;
+    }
+
+    /* ۲. محدود کردن عرض صفحه جهت جلوگیری از کشیده شدن بیش از حد */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+    }
+
+    /* ۳. کارت‌های اصلی بخش‌ها */
+    .section {
+      background: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e1e8ed;
+    }
+
+    .section h2 {
+      color: #34495e;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #ecf0f1;
+      padding-bottom: 8px;
+    }
+
+    /* ۴. استایل آیتم‌های داخل لیست */
+    .card {
+      border-bottom: 1px solid #f0f0f0;
+      padding: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card:last-child {
+      border-bottom: none;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .planet-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #1a252f;
+    }
+
+    /* ۵. نشان‌ها (Badges) */
+    .badge {
+      background-color: #3498db;
+      color: #ffffff;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.82em;
+      display: inline-block;
+    }
+
+    .badge-house {
+      background-color: #8e44ad;
+    }
+
+    .badge-empty {
+      background-color: #95a5a6;
+    }
+
+    .description {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>تحلیل جایگاه سیارات در چارت</h1>
+  <div class="container">
+    <h1>تحلیل جایگاه سیارات در چارت</h1>
 
-  <!-- ۱. وضعیت سیارات (محور اصلی) -->
-  <div class="section">
-    <h2>۱. جایگاه سیارات (Planets Placement)</h2>
-    <div id="planets-list"></div>
-  </div>
+    <!-- ۱. وضعیت سیارات -->
+    <div class="section">
+      <h2>۱. جایگاه سیارات (Planets Placement)</h2>
+      <div id="planets-list"></div>
+    </div>
 
-  <!-- ۲. نمای خانه‌ها (تجمع سیارات) -->
-  <div class="section">
-    <h2>۲. وضعیت خانه‌ها (Houses Overview)</h2>
-    <div id="houses-list"></div>
+    <!-- ۲. نمای خانه‌ها -->
+    <div class="section">
+      <h2>۲. وضعیت خانه‌ها (Houses Overview)</h2>
+      <div id="houses-list"></div>
+    </div>
   </div>
 
   <script>
-    // ۱. اطلاعات اصلی سیارات و جایگاه آن‌ها در چارت فرد
+    // داده‌های سیارات
     const planetsData = [
       { name: "خورشید", symbol: "☉", sign: "اسد", house: 5, function: "هویت، اراده و مرکز ثقل روان" },
       { name: "ماه", symbol: "☽", sign: "حوت", house: 12, function: "احساسات، غرایز و نیازهای عاطفی" },
@@ -46,37 +135,45 @@
       { name: "پلوتو", symbol: "♇", sign: "عقرب", house: 8, function: "تحول بنیادین و قدرت پنهان" }
     ];
 
-    // ۲. رندر کردن لیست سیارات (روش اصلی)
+    // رندر لیست سیارات
     const planetsContainer = document.getElementById('planets-list');
+    let planetsHTML = '';
     planetsData.forEach(p => {
-      planetsContainer.innerHTML += `
+      planetsHTML += `
         <div class="card">
-          <strong>${p.symbol} ${p.name}</strong> 
-          <span class="badge">نشان: ${p.sign}</span>
-          <span class="badge badge-house">خانه ${p.house}</span>
-          <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #555;">${p.function}</p>
+          <div class="card-header">
+            <span class="planet-title">${p.symbol} ${p.name}</span>
+            <span class="badge">نشان: ${p.sign}</span>
+            <span class="badge badge-house">خانه ${p.house}</span>
+          </div>
+          <div class="description">${p.function}</div>
         </div>`;
     });
+    planetsContainer.innerHTML = planetsHTML;
 
-    // ۳. رندر کردن خانه‌ها بر اساس سیارات موجود در آن‌ها
+    // رندر نمای خانه‌ها
     const housesContainer = document.getElementById('houses-list');
+    let housesHTML = '';
     for (let houseNum = 1; houseNum <= 12; houseNum++) {
-      // پیدا کردن سیاراتی که در این خانه قرار دارند
       const planetsInHouse = planetsData.filter(p => p.house === houseNum);
 
-      let houseContent = "";
+      let houseDetails = "";
       if (planetsInHouse.length > 0) {
         const names = planetsInHouse.map(p => `${p.symbol} ${p.name}`).join('، ');
-        houseContent = `حاوی سیارات: <strong>${names}</strong> (${planetsInHouse.length} سیاره)`;
+        houseDetails = `حاوی سیارات: <strong>${names}</strong> (${planetsInHouse.length} سیاره)`;
       } else {
-        houseContent = `<span class="badge badge-empty">خانه خالی</span> (بدون سیاره اصلی)`;
+        houseDetails = `<span class="badge badge-empty">خانه خالی</span>`;
       }
 
-      housesContainer.innerHTML += `
+      housesHTML += `
         <div class="card">
-          <strong>خانه ${houseNum}:</strong> ${houseContent}
+          <div class="card-header">
+            <strong>خانه ${houseNum}:</strong>
+            <span>${houseDetails}</span>
+          </div>
         </div>`;
     }
+    housesContainer.innerHTML = housesHTML;
   </script>
 
 </body>
