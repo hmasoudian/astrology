@@ -1,142 +1,27 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>آموزش و بانک اطلاعاتی آسترولوژی</title>
-  <style>
-    body { font-family: Tahoma, sans-serif; line-height: 1.6; margin: 20px; background-color: #f9f9f9; color: #333; }
-    h1 { text-align: center; color: #2c3e50; }
-    .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .card { border-bottom: 1px solid #eee; padding: 10px 0; }
-    .card:last-child { border-bottom: none; }
-    .badge { background: #3498db; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; }
-  </style>
-</head>
-<body>
-
-  <h1>بانک اطلاعاتی نجوم و آسترولوژی</h1>
-
-  <!-- ۱. سیارات -->
-  <div class="section">
-    <h2>۱. سیارات (Planets)</h2>
-    <div id="planets-list"></div>
-  </div>
-
-  <!-- ۲. برج‌ها -->
-  <div class="section">
-    <h2>۲. برج‌ها / نشان‌ها (Zodiac Signs)</h2>
-    <div id="signs-list"></div>
-  </div>
-
-  <!-- ۳. خانه‌ها -->
-  <div class="section">
-    <h2>۳. خانه‌ها (Houses)</h2>
-    <div id="houses-list"></div>
-  </div>
-
-  <!-- ۴. زوایا -->
-  <div class="section">
-    <h2>۴. زوایا (Aspects)</h2>
-    <div id="aspects-list"></div>
-  </div>
-
-  <!-- ۵. الگوها -->
-  <div class="section">
-    <h2>۵. الگوهای چارت (Patterns)</h2>
-    <div id="patterns-list"></div>
-  </div>
-
-  <script>
-    // ۱. بانک اطلاعاتی دقیقاً با همان فایل JSON شما
-    const db = {
-      "planets": [
-        { "name_fa": "خورشید", "symbol": "☉", "core_function": "هویت، اراده، هدف زندگی و «منِ آگاه»، مرکز ثقل روان و هویت واحد" },
-        { "name_fa": "ماه", "symbol": "☽", "core_function": "احساسات، غرایز، نیازهای عاطفی، «منِ ناخودآگاه»، عادت‌ها و پناهگاه عاطفی روان" },
-        { "name_fa": "عطارد", "symbol": "☿", "core_function": "ذهن منطقی، عملکرد ذهن آگاه، یادگیری، تحلیل اطلاعات، ارتباطات و بیان افکار" },
-        { "name_fa": "زهره", "symbol": "♀", "core_function": "عشق، زیبایی، ارزش‌های شخصی و درونی، جذب مادی و عاطفی، لذت و رضایت در روابط" },
-        { "name_fa": "مریخ", "symbol": "♂", "core_function": "موتور حرکت شخصیت، انرژی حیاتی، انگیزه، شجاعت، قدرت ابراز وجود، اقدام، رقابت و نحوه پیگیری اهداف" },
-        { "name_fa": "مشتری", "symbol": "♃", "core_function": "توسعه، رشد، گسترش آگاهی، خوش‌بینی، ایمان، فلسفه، جستجوی معنا و شانس در چارت" },
-        { "name_fa": "زحل", "symbol": "♄", "core_function": "نماد ساختار، نظم، انضباط، مسئولیت، محدودیت، بلوغ، واقع‌گرایی و پشتکار در برابر ناملایمات" },
-        { "name_fa": "اورانوس", "symbol": "♅", "core_function": "نماد آزادی، نوآوری، بیداری ناگهانی، نبوغ، دگرگونی انقلابی، شکستن کلیشه‌ها و استقلال فردی عمیق" },
-        { "name_fa": "نپتون", "symbol": "♆", "core_function": "سیاره الهام، شهود، معنویت، تخیل خلاق، یگانگی عمیق، شفقت بی‌قیدوشرط و گریز از مرزهای مادی روان" },
-        { "name_fa": "پلوتو", "symbol": "♇", "core_function": "نماد عمیق‌ترین لایه‌های ناخودآگاه، قدرت پنهان، تحول بنیادین، مرگ و تولد دوباره، بازسازی همه‌جانبه شخصیت از طریق بحران‌ها" }
-      ],
-      "zodiac_signs": [
-        { "name_fa": "حمل", "emoji": "♈", "archetype_short": "تولد من (من هستم)" },
-        { "name_fa": "ثور", "emoji": "♉", "archetype_short": "تثبیت من (عزت نفس و ارزش مادی)" },
-        { "name_fa": "جوزا", "emoji": "♊", "archetype_short": "کاوش من (کنجکاوی ذهنی)" },
-        { "name_fa": "سرطان", "emoji": "♋", "archetype_short": "ریشه‌های من (پایگاه عاطفی و خانه)" },
-        { "name_fa": "اسد", "emoji": "♌", "archetype_short": "درخشش من (خلاقیت و پادشاهی نفس)" },
-        { "name_fa": "سنبله", "emoji": "♍", "archetype_short": "پالایش من (دقت، خدمت و تمییز)" },
-        { "name_fa": "میزان", "emoji": "♎", "archetype_short": "آینه من (روابط متعهدانه و تعادل)" },
-        { "name_fa": "عقرب", "emoji": "♏", "archetype_short": "تحول من (عمق، بحران و بازسازی)" },
-        { "name_fa": "قوس", "emoji": "♐", "archetype_short": "افق‌های من (جستجوی حقیقت و معنا)" },
-        { "name_fa": "جدی", "emoji": "♑", "archetype_short": "ساختن من (مسئولیت، اقتدار و ساختار)" },
-        { "name_fa": "دلو", "emoji": "♒", "archetype_short": "من در میان ما (آزادی و رسالت جمعی)" },
-        { "name_fa": "حوت", "emoji": "♓", "archetype_short": "بازگشت به وحدت (معنویت، شهود و تسلیم)" }
-      ],
-      "houses": [
-        { "number": 1, "key_code": "خود", "domain": "شخصیت بیرونی، ظاهر فیزیکی، نحوه مواجهه اولیه با جهان" },
-        { "number": 2, "key_code": "ارزش و منابع مادی", "domain": "امنیت مادی، استعدادهای ذاتی فرد، عزت نفس و احساس ارزشمندی درونی" },
-        { "number": 3, "key_code": "یادگیری و ارتباطات نزدیک", "domain": "ذهن عینی و روزمره، یادگیری‌های اولیه، ارتباط با نزدیکان" },
-        { "number": 4, "key_code": "خانه، خانواده، ریشه", "domain": "زندگی خصوصی، پایگاه خانوادگی، ریشه‌های خونی و روانی" },
-        { "number": 5, "key_code": "خلاقیت، خودابرازی", "domain": "تفریحات و سرگرمی، عشق رمانتیک، خلاقیت هنری، فرزندان" },
-        { "number": 6, "key_code": "کار روزمره، نظم، خدمت", "domain": "کارهای روزمره، دیسیپلین شخصی، سلامت جسمی و تغذیه" },
-        { "number": 7, "key_code": "رابطه و مشارکت", "domain": "روابط دوطرفه متعهدانه، ازدواج مکتوب و رسمی، شراکت‌های تجاری" },
-        { "number": 8, "key_code": "تحول، اشتراک، عمق", "domain": "منابع مشترک مادی و عاطفی، تولد دوباره پس از شکست‌ها" },
-        { "number": 9, "key_code": "باور، سفر، آموزش عالی", "domain": "سفرهای طولانی بین‌المللی، تحصیلات عالی، مذهب و فلسفه" },
-        { "number": 10, "key_code": "جایگاه، مسئولیت، شغل", "domain": "مسیر شغلی و موفقیت حرفه‌ای، جایگاه اجتماعی، شهرت" },
-        { "number": 11, "key_code": "اجتماع، گروه, آینده", "domain": "دوستان صمیمی همفکر، امیدها و آرزوهای آینده، اهداف جمعی" },
-        { "number": 12, "key_code": "ناخودآگاه، انزوا، معنویت", "domain": "تنهایی اختیاری یا اجباری، انزوا، عرفان ناب، رؤیاپردازی" }
-      ],
-      "aspects": [
-        { "name_fa": "اقتران", "angle": "۰ درجه", "keywords": "ادغام + تمرکز + فوران انرژی" },
-        { "name_fa": "تسدیس", "angle": "۶۰ درجه", "keywords": "فرصت + همکاری + نیاز به تلاش آگاهانه" },
-        { "name_fa": "تربیع", "angle": "۹۰ درجه", "keywords": "اصطکاک + فشار مداوم + بحران محرک رشد" },
-        { "name_fa": "تثلیث", "angle": "۱۲۰ درجه", "keywords": "استعداد آماده + جریان طبیعی + خطر راحت‌طلبی" },
-        { "name_fa": "تقابل", "angle": "۱۸۰ درجه", "keywords": "رویارویی + تنش مستقیم + نیاز مبرم به تعادل" }
-      ],
-      "patterns": [
-        { "name_fa": "استلیوم", "concept": "تمرکز فوق‌العاده شدید و عمیق انرژی در یک حوزه مشخص از زندگی." },
-        { "name_fa": "مثلث بزرگ", "concept": "جریان فوق‌العاده روان انرژی در یک عنصر. موهبت استعدادها و ظرفیت‌های خلاق." },
-        { "name_fa": "صلیب کیهانی", "concept": "تنش روانی، بحران و فشار سنگین زندگی از چهار جهت متفاوت." },
-        { "name_fa": "مربع تی", "concept": "فشار، تنش و اصطکاک شدید روی رأس قائم." }
-      ]
-    };
-
-    // ۲. توابع رندر داده‌ها روی صفحه بر اساس ترتیب درخواستی شما
-
-    // ۱. سیارات
-    const planetsContainer = document.getElementById('planets-list');
-    db.planets.forEach(p => {
-      planetsContainer.innerHTML += `<div class="card"><strong>${p.symbol} ${p.name_fa}</strong>: ${p.core_function}</div>`;
-    });
-
-    // ۲. برج‌ها
-    const signsContainer = document.getElementById('signs-list');
-    db.zodiac_signs.forEach(s => {
-      signsContainer.innerHTML += `<div class="card"><strong>${s.emoji} ${s.name_fa}</strong> - ${s.archetype_short}</div>`;
-    });
-
-    // ۳. خانه‌ها
-    const housesContainer = document.getElementById('houses-list');
-    db.houses.forEach(h => {
-      housesContainer.innerHTML += `<div class="card"><strong>خانه ${h.number} (${h.key_code})</strong>: ${h.domain}</div>`;
-    });
-
-    // ۴. زوایا
-    const aspectsContainer = document.getElementById('aspects-list');
-    db.aspects.forEach(a => {
-      aspectsContainer.innerHTML += `<div class="card"><strong>${a.name_fa} (${a.angle})</strong>: <span class="badge">${a.keywords}</span></div>`;
-    });
-
-    // ۵. الگوها
-    const patternsContainer = document.getElementById('patterns-list');
-    db.patterns.forEach(pt => {
-      patternsContainer.innerHTML += `<div class="card"><strong>${pt.name_fa}</strong>: ${pt.concept}</div>`;
-    });
-  </script>
-
-</body>
-</html>
+// نمونه مدل ساختار داده جدید برای سیارات
+const chartData = {
+  planets: [
+    { 
+      id: "sun", 
+      name_fa: "خورشید", 
+      symbol: "☉", 
+      sign: "اسد",    // نشان/برج
+      house: 5        // خانه
+    },
+    { 
+      id: "moon", 
+      name_fa: "ماه", 
+      symbol: "☽", 
+      sign: "عقرب", 
+      house: 8 
+    },
+    { 
+      id: "mercury", 
+      name_fa: "عطارد", 
+      symbol: "☿", 
+      sign: "اسد",    // چند سیاره می‌توانند در یک نشان یا خانه باشند
+      house: 5 
+    }
+    // مابقی سیارات...
+  ]
+};
