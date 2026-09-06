@@ -1,9 +1,337 @@
-</div>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه جامع تحلیل چارت آسترولوژی</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #0f172a;
+            --accent: #d97706;
+            --accent-hover: #b45309;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            direction: rtl;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            color: #f8fafc;
+        }
+
+        .author-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #fff;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .planet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .planet-btn {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .planet-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .planet-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .planet-btn .status-tag {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .planet-btn.active .status-tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .step-box {
+            background: #f8fafc;
+            border: 1px dashed var(--accent);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 0.88rem;
+        }
+
+        .step-item {
+            margin-bottom: 6px;
+        }
+
+        .step-item:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            color: #64748b;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>📘 سامانه جامع تحلیل چارت آسترولوژی</h1>
+            <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">بر اساس آموزه‌های استاد صالحی</p>
+        </div>
+        <div class="author-info">
+            <span>تنظیم‌کننده: <b>حسین مسعودیان</b></span> | 
+            <span id="live-datetime">---</span>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <!-- ستون راست: مشخصات فردی و مدیریت سیارات -->
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-title">👤 مشخصات مراجعه‌کننده</div>
+                <div class="form-group">
+                    <label for="client-name">نام و نام خانوادگی:</label>
+                    <input type="text" id="client-name" placeholder="مثال: علی محمدی" oninput="saveClientInfo()">
+                </div>
+                <div class="form-group">
+                    <label for="client-dob">تاریخ تولد:</label>
+                    <input type="text" id="client-dob" placeholder="مثال: ۱۳۶۵/۰۵/۱۲" oninput="saveClientInfo()">
+                </div>
+                <div class="form-group">
+                    <label for="client-tob">ساعت و محل تولد:</label>
+                    <input type="text" id="client-tob" placeholder="مثال: ۱۴:۳۰ - تهران" oninput="saveClientInfo()">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🪐 وضعیت ۱۰ سیاره اصلی</div>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">برای تنظیم یا ویرایش تحلیل هر سیاره روی آن کلیک کنید:</p>
+                <div class="planet-grid" id="planet-grid">
+                    <!-- به صورت دینامیک ساخته می‌شود -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">⚙️ عملیات چارت</div>
+                <div class="btn-group" style="flex-direction: column;">
+                    <button class="btn btn-primary" onclick="exportFullChartHTML()">📥 دریافت خروجی گزارش HTML</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">🗑️ پاک‌سازی کامل اطلاعات</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ستون چپ: تحلیل ترکیبی سیاره + برج + خانه -->
+        <div class="main-content">
+            <div class="card">
+                <div class="card-title">🔮 ترکیب سه گانه (سیاره + برج + خانه)</div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label for="select-planet">۱. انتخاب سیاره:</label>
+                        <select id="select-planet" onchange="loadPlanetDataIfExist()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="select-sign">۲. انتخاب برج (نشان):</label>
+                        <select id="select-sign"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="select-house">۳. انتخاب خانه:</label>
+                        <select id="select-house"></select>
+                    </div>
+                </div>
+
+                <div class="btn-group" style="margin-bottom: 15px;">
+                    <button class="btn btn-secondary" onclick="generateAnalysis()">⚡ تولید خودکار متن تحلیل ترکیبی</button>
+                </div>
+
+                <div id="analysis-preview" style="display: none;">
+                    <div class="step-box" id="step-by-step"></div>
+                    <div class="form-group">
+                        <label for="final-user-text">متن نهایی تحلیل (قابل ویرایش):</label>
+                        <textarea id="final-user-text" rows="10"></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="savePlanetData()">💾 ثبت و ذخیره تحلیل برای این سیاره</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <footer>
+        سامانه شخصی ساخت گزارش چارت آسترولوژی - طراحی‌شده برای استفاده تماماً آفلاین
+    </footer>
 </div>
 
 <script>
-// داده‌های کامل دیتابیس پایه‌ای
+// دیتابیس جامع و پایه برنامه
 const dbData = {
     "tables": {
         "houses_table": [
@@ -51,7 +379,6 @@ const dbData = {
 
 let userChartStore = {};
 
-// به‌روزرسانی ساعت زنده
 function updateLiveTime() {
     const now = new Date();
     document.getElementById('live-datetime').innerText = now.toLocaleTimeString('fa-IR') + ' - ' + now.toLocaleDateString('fa-IR');
@@ -59,7 +386,6 @@ function updateLiveTime() {
 setInterval(updateLiveTime, 1000);
 updateLiveTime();
 
-// مقداردهی اولیه فرم‌ها
 function initApp() {
     loadSavedStore();
     
@@ -268,7 +594,6 @@ function exportFullChartHTML() {
     URL.revokeObjectURL(url);
 }
 
-// اجرا در زمان بارگذاری
 window.onload = initApp;
 </script>
 </body>
